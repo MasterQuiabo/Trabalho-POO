@@ -2,16 +2,19 @@ package Wizards;
 
 public abstract class Wizard {
 
-	protected double HP;
-	protected double MP;
-	protected double fireResistance;
-	protected double iceResistance;
-	protected double earthResistance;
+	private double HP;
+	private double MP;
+	private double fireResistance;
+	private double iceResistance;
+	private double earthResistance;
 	
-	protected Wizard()
+	protected Wizard(double fireResistance, double iceResistance, double earthResistance)
 	{
 		this.HP = 100;
 		this.MP = 100;
+		this.fireResistance = fireResistance;
+		this.earthResistance = earthResistance;
+		this.iceResistance = iceResistance;
 	}
 	
 	protected void loseHP(double DMG)
@@ -27,6 +30,31 @@ public abstract class Wizard {
 	protected void passiveRegeneration()
 	{
 		this.MP = this.MP + 20.0;
+	}
+	
+	protected double getHP()
+	{
+		return this.HP;
+	}
+	
+	protected double getMP()
+	{
+		return this.MP;
+	}
+	
+	protected double getFireResistance()
+	{
+		return this.fireResistance;
+	}
+	
+	protected double getEarthResistance()
+	{
+		return this.earthResistance;
+	}
+	
+	protected double getIceResistance()
+	{
+		return this.iceResistance;
 	}
 		
 }
