@@ -55,9 +55,9 @@ public class PlayState extends GameState{
 		}
 		//desenha o layout
 		g.setColor(Color.white.darker());
-		g.fillRect(0, Panel.height-tileSize, Panel.width, tileSize);
+		g.fillRect(0, Panel.height-tileSize-12, Panel.width, tileSize+12);
 	
-		g.fillRect(0, Panel.height-tileSize-356, Panel.width, tileSize);
+		g.fillRect(0, 0, Panel.width, tileSize);
 		
 		
 		for(int i=0;i<5;i++) {
@@ -69,32 +69,33 @@ public class PlayState extends GameState{
 		
 		for(int i=0;i<5;i++) {
 			g.setColor(Color.gray);
-			g.drawRect(i*64,Panel.height-420, 64, 64);
+			g.drawRect(i*64,0, 64, 64);
 			g.setColor(Color.gray.darker());
-			g.drawRect(i*64+1,Panel.height-420, 62, 62);
+			g.drawRect(i*64+1,1, 62, 62);
 		}
 		
 		g.setColor(Color.white);
 		g.drawString(playerNames[0],0,Panel.height-65);
-		g.drawString(playerFields[0],400,Panel.height-50);
-		g.drawString(playerFields[1],520,Panel.height-50);
-		g.fillRect(400,Panel.height-380,100, 10);
-		g.fillRect(520,Panel.height-380,100, 10);
+		g.drawString(playerFields[0],350,Panel.height-50);
+		g.drawString(playerFields[1],350,Panel.height-20);
+		g.fillRect(350,Panel.height-50,(int) this.playersArray.get(0).getMaxHP(), 10);
+		g.fillRect(350,Panel.height-20,(int) this.playersArray.get(0).getMaxMP(), 10);
 		g.setColor(Color.red);
-		g.fillRect(400,Panel.height-380,(int) this.playersArray.get(1).getHP(), 10);
+		g.fillRect(350,Panel.height-50,(int) this.playersArray.get(0).getHP(), 10);
 		g.setColor(Color.blue);
-		g.fillRect(520,Panel.height-380,(int) this.playersArray.get(1).getMP(), 10);
+		g.fillRect(350,Panel.height-20,(int) this.playersArray.get(0).getMP(), 10);
+		
 		
 		g.setColor(Color.white);
-		g.drawString(playerNames[1],0,Panel.height-345);
-		g.drawString(playerFields[0],400,Panel.height-380);
-		g.drawString(playerFields[1],520,Panel.height-380);
-		g.fillRect(400,Panel.height-50,100, 10);
-		g.fillRect(520,Panel.height-50,100, 10);
+		g.drawString(playerNames[1],0,Panel.height-325);
+		g.drawString(playerFields[0],350,Panel.height-380);
+		g.drawString(playerFields[1],350,Panel.height-350);
+		g.fillRect(350,Panel.height-380,(int) this.playersArray.get(1).getMaxHP(), 10);
+		g.fillRect(350,Panel.height-350,(int) this.playersArray.get(1).getMaxMP(), 10);
 		g.setColor(Color.red);
-		g.fillRect(400,Panel.height-50,(int) this.playersArray.get(0).getHP(), 10);
+		g.fillRect(350,Panel.height-380,(int) this.playersArray.get(1).getHP(), 10);
 		g.setColor(Color.blue);
-		g.fillRect(520,Panel.height-50,(int) this.playersArray.get(0).getMP(), 10);
+		g.fillRect(350,Panel.height-350,(int) this.playersArray.get(1).getMP(), 10);
 		
 		
 	}
@@ -195,24 +196,11 @@ public class PlayState extends GameState{
 		
 		// Ativa regeneração passiva de MP, caso o valor passivo exceda o máximo de MP ele não extrapola
 		
-		if(upWizOne.getMP() < maxMP(upWizOne))
-		{
-			if((upWizOne.getMP() + 5.0) > maxMP(upWizOne))
-			{
-				upWizOne.passiveRegeneration(validateType(upWizOne));
-			}
-			else
-				upWizOne.passiveRegeneration();
-		}
-		if(upWizTwo.getMP() < maxMP(upWizTwo))
-		{
-			if((upWizTwo.getMP() + 5.0) > maxMP(upWizTwo))
-			{
-				upWizTwo.passiveRegeneration(validateType(upWizTwo));
-			}
-			else
-				upWizTwo.passiveRegeneration();
-		}
+		// *Mudei pra simplificar o codigo. Agora o metodo passive regeneration testa se ultrapassou ou n�o o maxMP.
+		
+		upWizOne.passiveRegeneration();
+		
+		upWizTwo.passiveRegeneration();
 		
 		// Atualiza os dados no array
 		

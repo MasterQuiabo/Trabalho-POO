@@ -19,7 +19,7 @@ public class Panel extends JPanel implements ActionListener{
 	
 	// Dimensões
 	
-	public static final int width = 650;
+	public static final int width = 600;
 	public static final int height = 400;
 	
 	// Escala

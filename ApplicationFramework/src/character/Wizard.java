@@ -1,7 +1,8 @@
 package character;
 
 public abstract class Wizard {
-
+	private double maxHP;
+	private double maxMP;
 	private double HP;
 	private double MP;
 	private double fireResistance;
@@ -11,12 +12,28 @@ public abstract class Wizard {
 	
 	public Wizard(double HP, double MP, double fireResistance, double iceResistance, double earthResistance)
 	{
+		this.maxHP = HP;
+		this.maxMP = MP;
 		this.HP = HP;
 		this.MP = MP;
 		this.fireResistance = fireResistance;
 		this.earthResistance = earthResistance;
 		this.iceResistance = iceResistance;
 		this.turnsStunned = 0;
+	}
+	
+	/* Metodos para ver hp e mp maximos.
+	 Assim podemos substituir metodos exaustivos que
+	 testam o tipo de mago para lidar com hp e mp,
+	 alem de permitir que removamos os metodos maxHP e maxMP
+	 da classe PlayState*/
+	
+	public double getMaxHP() {
+		return maxHP;
+	}
+	
+	public double getMaxMP() {
+		return maxMP;
 	}
 	
 	// Habilidades genéricas //
@@ -63,25 +80,15 @@ public abstract class Wizard {
 		this.HP = this.HP + HP;
 	}
 	
+	//Agora o passive regeneration que lida com os excessos de MP.
+	
 	public void passiveRegeneration()
 	{
 		this.MP = this.MP + 5.0;
-	}
-	
-	public void passiveRegeneration(int overFlowType)
-	{
-		if(overFlowType == 1)
-		{
-			this.MP = 100;
+		if(this.MP>getMaxMP()) {
+			this.MP = getMaxMP();
 		}
-		else if(overFlowType == 2)
-		{
-			this.MP = 80;
-		}
-		else if(overFlowType == 3)
-		{
-			this.MP = 120;
-		}
+			
 	}
 	
 	// ---------------------------------------- //
