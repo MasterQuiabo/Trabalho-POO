@@ -25,7 +25,7 @@ public class MenuState extends GameState{
 		this.altFont = new Font("Serif",Font.PLAIN, 15);
 		try {
 			bg = new Background("/Backgrounds/menuBg.png");
-			bg.setVector(-4, 0);
+			bg.setVector(-5, 0);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

@@ -16,15 +16,23 @@ import javax.swing.Timer;
 import gameStates.StateManager;
 
 public class Panel extends JPanel implements ActionListener{
-	//dimensoes
-	public static final int width = 600;
+	
+	// Dimensões
+	
+	public static final int width = 650;
 	public static final int height = 400;
-	//escala
+	
+	// Escala
+	
 	public static final int scale = 2;
-	//graficos
+	
+	// Graficos
+	
 	private Graphics2D g;
 	private BufferedImage img;
-	//gerenciador de estados
+	
+	// Gerenciador de estados
+	
 	private StateManager stateManager;
 	
 	private Timer timer;
@@ -56,7 +64,9 @@ public class Panel extends JPanel implements ActionListener{
 	public void draw() {
 		stateManager.draw(g);;
 	}
-	//passamos o desenho off-screen(buffer) para a tela
+	
+	// Passamos o desenho off-screen(buffer) para a tela
+	
 	public void drawToScreen() {
 		Graphics2D g2 = (Graphics2D)getGraphics();
 		g2.drawImage(img, 0, 0, width*scale, height*scale,null);
