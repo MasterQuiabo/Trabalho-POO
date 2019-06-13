@@ -6,4 +6,8 @@ public class IceWizard extends Wizard{
 	{
 		super(1.2, 1.0, 0.8);
 	}
+	
+	public double elementalStrike(){
+		super.loseMP();
+	}
 }

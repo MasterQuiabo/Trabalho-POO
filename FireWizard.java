@@ -7,7 +7,7 @@ public class FireWizard extends Wizard{
 		super(1.0, 1.2, 0.8);
 	}
 	
-	public double Elemental_Strike()
+	public double elementalStrike()
 	{
 		double DMG = 10;
 		double consumeMP = 10;
@@ -15,5 +15,9 @@ public class FireWizard extends Wizard{
 		super.loseMP(consumeMP);
 		return DMG;
 
+	}
+	
+	public double Stun(){
+		super.getHP();
 	}
 }
