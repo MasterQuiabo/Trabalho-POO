@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -18,6 +19,11 @@ public class PlayState extends GameState{
 	
 	private BufferedImage scenary;
 	private static int tileSize = 64;
+	private BufferedImage[] fireIcons;
+	private BufferedImage[] iceIcons;
+	private BufferedImage[] earthIcons;
+	private BufferedImage wIcon;
+	private String[] iconNames = {"fireQ","fireE","fireR","iceQ","iceE","iceR","earthQ","earthE","earthR","wisdomW"};
 	private static String[] playerFields = {"HP","MP"};
 	private static String[] playerNames = {"Player One","Player Two"};
 	private static String[] playerTurn = {"Player One Turn!!","Player Two Turn!!"};
@@ -35,6 +41,38 @@ public class PlayState extends GameState{
 		playersArray = new ArrayList<Wizard>();
 		playersArray.add(playerOne);
 		playersArray.add(playerTwo);
+		
+		fireIcons = new BufferedImage[3];
+		iceIcons = new BufferedImage[3];
+		earthIcons = new BufferedImage[3];
+		
+		for(int i=0;i<fireIcons.length;i++) {
+			try {
+				fireIcons[i] = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[i]+".png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		for(int i=0;i<iceIcons.length;i++) {
+			try {
+				iceIcons[i] = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[i+fireIcons.length]+".png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		for(int i=0;i<earthIcons.length;i++) {
+			try {
+				earthIcons[i] = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[i+iceIcons.length]+".png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		try {
+			wIcon = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[9]+".png"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			scenary = ImageIO.read(getClass().getResourceAsStream("/Tiles/grasstile.png"));
@@ -60,15 +98,13 @@ public class PlayState extends GameState{
 	
 		g.fillRect(0, 0, Panel.width, tileSize);
 		
-		
-		for(int i=0;i<5;i++) {
-			g.setColor(Color.gray);
-			g.drawRect(i*64,Panel.height-65, 64, 64);
-			g.setColor(Color.gray.darker());
-			g.drawRect(i*64+1,Panel.height-64, 62, 62);
+		g.drawImage(fireIcons[0],10,Panel.height-64,48,48,null );
+		for(int i=1;i<3;i++) {
+			g.drawImage(fireIcons[i], (i+1)*48+10, Panel.height-64,48,48,null );
 		}
+		g.drawImage(wIcon, 48+10, Panel.height-64,48,48,null);
 		
-		for(int i=0;i<5;i++) {
+		for(int i=0;i<4;i++) {
 			g.setColor(Color.gray);
 			g.drawRect(i*64,0, 64, 64);
 			g.setColor(Color.gray.darker());
