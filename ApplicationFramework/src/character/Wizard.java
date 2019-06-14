@@ -25,7 +25,7 @@ public abstract class Wizard {
 	/* Metodos para ver hp e mp maximos.
 	 Assim podemos substituir metodos exaustivos que
 	 testam o tipo de mago para lidar com hp e mp,
-	 alem de permitir que removamos os metodos maxHP e maxMP
+	 alem de permitir que removamos o metodo maxMP
 	 da classe PlayState*/
 	
 	public double getMaxHP() {

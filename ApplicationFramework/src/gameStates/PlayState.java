@@ -126,26 +126,6 @@ public class PlayState extends GameState{
 		return 0;
 	}
 	
-	// Verifica o MP máximo daquela instancia 
-	
-	public double maxMP(Wizard wiz)
-	{
-		if(wiz instanceof FireWizard)
-		{
-			return 100;
-		}
-		else if(wiz instanceof IceWizard)
-		{
-			return 80;
-		}
-		else if(wiz instanceof EarthWizard)
-		{
-			return 120;
-		}
-		
-		return 0;
-	}
-	
 	// Verifica o tipo de mago do oponente
 	
 	public int otherPlayerType()
@@ -236,7 +216,7 @@ public class PlayState extends GameState{
 			case KeyEvent.VK_Q:
 				DMG = this.playersArray.get(actualTurn).elementalStrike();
 				updateGame();
-				mitigateDMG(DMG);
+				DMG = mitigateDMG(DMG);
 				this.playersArray.get(actualTurn).loseHP(DMG);
 				System.out.println(actualTurn);
 				break;
@@ -249,7 +229,7 @@ public class PlayState extends GameState{
 			case KeyEvent.VK_E:
 				DMG = this.playersArray.get(actualTurn).ultimateStrike();
 				updateGame();
-				mitigateDMG(DMG);
+				DMG = mitigateDMG(DMG);
 				this.playersArray.get(actualTurn).loseHP(DMG);
 				break;
 				
