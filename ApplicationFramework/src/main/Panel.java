@@ -28,7 +28,7 @@ public class Panel extends JPanel implements ActionListener{
 	
 	// Graficos
 	
-	private Graphics2D g;
+	public static Graphics2D g;
 	private BufferedImage img;
 	
 	// Gerenciador de estados

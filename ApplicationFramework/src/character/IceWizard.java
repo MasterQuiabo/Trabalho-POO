@@ -54,7 +54,7 @@ public class IceWizard extends Wizard{
 	
 	public int stunningBlow(){
 		double consumeMP = 40;
-		int turnsStunned = 1;
+		int turnsStunned = 2;
 
 		if(super.getMP() >= 40)
 		{

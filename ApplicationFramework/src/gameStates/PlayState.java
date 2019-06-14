@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import character.*;
 
 import graphics.Background;
+import graphics.CharacterAnimator;
 import main.Panel;
 import java.util.ArrayList;
 
@@ -23,6 +24,8 @@ public class PlayState extends GameState{
 	private BufferedImage[] iceIcons;
 	private BufferedImage[] earthIcons;
 	private BufferedImage wIcon;
+	private CharacterAnimator playerOneSprite;
+	private String[] spritesNames = {"redWizard.png","blueWizard.png","greenWizard.png"};
 	private String[] iconNames = {"fireQ","fireE","fireR","iceQ","iceE","iceR","earthQ","earthE","earthR","wisdomW"};
 	private static String[] playerFields = {"HP","MP"};
 	private static String[] playerNames = {"Player One","Player Two"};
@@ -45,6 +48,8 @@ public class PlayState extends GameState{
 		fireIcons = new BufferedImage[3];
 		iceIcons = new BufferedImage[3];
 		earthIcons = new BufferedImage[3];
+		
+		playerOneSprite = new CharacterAnimator(spritesNames[0],200);
 		
 		for(int i=0;i<fireIcons.length;i++) {
 			try {
@@ -149,13 +154,12 @@ public class PlayState extends GameState{
 		g.setColor(Color.blue);
 		g.fillRect(350,Panel.height-350,(int) this.playersArray.get(1).getMP(), 10);
 		
-		
+		playerOneSprite.draw(g);
 	}
 
 	@Override
 	public void update() {
 		bg.update();
-		
 	}
 	
 	// Retorna dados sobre o tipo do mago
@@ -277,6 +281,7 @@ public class PlayState extends GameState{
 	@Override
 	public void keyPressed(int key) {
 		double DMG;
+		
 		switch(key) {
 			case KeyEvent.VK_Q:
 				DMG = this.playersArray.get(actualTurn).elementalStrike();
@@ -324,20 +329,25 @@ public class PlayState extends GameState{
 				if(playerType == 1)
 				{
 					DMG = ((FireWizard) this.playersArray.get(actualTurn)).trueFlames();
-					this.playersArray.get(getOtherPlayer()).loseHP(DMG);
-					updateGame();
+					if(DMG != -1) {
+						this.playersArray.get(getOtherPlayer()).loseHP(DMG);
+						updateGame();
+					}
 				}
 				else if(playerType == 2)
 				{
 					int turnsStunned = ((IceWizard) this.playersArray.get(actualTurn)).stunningBlow();
 					this.playersArray.get(getOtherPlayer()).stun(turnsStunned);
-					
-					updateGame();
+					if(turnsStunned != -1) {
+						updateGame();
+					}
 				}
 				else if(playerType == 3)
 				{
-					((EarthWizard) this.playersArray.get(actualTurn)).intenseHealing();
-					updateGame();
+					double heal = ((EarthWizard) this.playersArray.get(actualTurn)).intenseHealing();
+					if(heal != -1) {
+						updateGame();
+					}
 				}
 				break;
 		}
