@@ -18,12 +18,12 @@ import java.util.ArrayList;
 
 public class PlayState extends GameState{
 	
+	private Wizard playerOne;
+	private Wizard playerTwo;
+	
 	private BufferedImage scenary;
 	private static int tileSize = 64;
-	private BufferedImage[] fireIcons;
-	private BufferedImage[] iceIcons;
-	private BufferedImage[] earthIcons;
-	private BufferedImage wIcon;
+	private BufferedImage[] playerOneIcons;
 	private CharacterAnimator playerOneSprite;
 	private String[] spritesNames = {"redWizard.png","blueWizard.png","greenWizard.png"};
 	private String[] iconNames = {"fireQ","fireE","fireR","iceQ","iceE","iceR","earthQ","earthE","earthR","wisdomW"};
@@ -33,48 +33,44 @@ public class PlayState extends GameState{
 	private ArrayList<Wizard> playersArray;
 	private int actualTurn = 0;
 
-	public PlayState(StateManager sm) {
+	public PlayState(StateManager sm, Wizard p1) {
 		super(sm);
 		
 		// Jogadores de teste
-		
-		Wizard playerOne = new FireWizard();
-		Wizard playerTwo = new EarthWizard();
+		playerOne = p1;
+		playerTwo = new EarthWizard();
 		
 		playersArray = new ArrayList<Wizard>();
 		playersArray.add(playerOne);
 		playersArray.add(playerTwo);
 		
-		fireIcons = new BufferedImage[3];
-		iceIcons = new BufferedImage[3];
-		earthIcons = new BufferedImage[3];
+		playerOneIcons = new BufferedImage[4];
 		
-		playerOneSprite = new CharacterAnimator(spritesNames[0],200);
+		init();
+	}
+	
+	public void init() {
+		int aux = 0; // Os icones são definidos como os do fireWizard por default
 		
-		for(int i=0;i<fireIcons.length;i++) {
+		if(playerOne instanceof IceWizard) {
+			aux = 3;
+		}
+		else if(playerOne instanceof EarthWizard) {
+			aux = 6;
+		}
+			
+		playerOneSprite = new CharacterAnimator(spritesNames[aux/3]);
+		playerOneSprite.setPosition(200,Panel.height-145);
+		
+		for(int i=0;i<playerOneIcons.length;i++) {
 			try {
-				fireIcons[i] = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[i]+".png"));
+				playerOneIcons[i] = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[i+aux]+".png"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		for(int i=0;i<iceIcons.length;i++) {
-			try {
-				iceIcons[i] = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[i+fireIcons.length]+".png"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		for(int i=0;i<earthIcons.length;i++) {
-			try {
-				earthIcons[i] = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[i+iceIcons.length]+".png"));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
 		try {
-			wIcon = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[9]+".png"));
+			playerOneIcons[3] = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[9]+".png"));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -103,11 +99,11 @@ public class PlayState extends GameState{
 	
 		g.fillRect(0, 0, Panel.width, tileSize);
 		
-		g.drawImage(fireIcons[0],10,Panel.height-64,48,48,null );
+		g.drawImage(playerOneIcons[0],10,Panel.height-64,48,48,null );
 		for(int i=1;i<3;i++) {
-			g.drawImage(fireIcons[i], (i+1)*48+10, Panel.height-64,48,48,null );
+			g.drawImage(playerOneIcons[i], (i+1)*48+10, Panel.height-64,48,48,null );
 		}
-		g.drawImage(wIcon, 48+10, Panel.height-64,48,48,null);
+		g.drawImage(playerOneIcons[3], 48+10, Panel.height-64,48,48,null);
 		
 		for(int i=0;i<4;i++) {
 			g.setColor(Color.gray);
@@ -351,6 +347,14 @@ public class PlayState extends GameState{
 				}
 				break;
 		}
+	}
+
+	public Wizard getPlayerOne() {
+		return playerOne;
+	}
+
+	public void setPlayerOne(Wizard playerOne) {
+		this.playerOne = playerOne;
 	}
 	
 }

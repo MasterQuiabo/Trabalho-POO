@@ -22,7 +22,7 @@ public class MenuState extends GameState{
 		super(sm);
 		this.curChoice = 0;
 		this.titleFont = new Font("Arial",Font.CENTER_BASELINE, 24);
-		this.altFont = new Font("Serif",Font.PLAIN, 15);
+		this.altFont = new Font("Serif", Font.PLAIN, 15);
 		try {
 			bg = new Background("/Backgrounds/menuBg.png");
 			bg.setVector(-5, 0);
@@ -63,7 +63,7 @@ public class MenuState extends GameState{
 	private void select() {
 		switch(curChoice) {
 			case 0:
-				stateManager.setState(State.PLAYSTATE);
+				stateManager.push(new CharacterSelectionState(stateManager));
 				break;
 			
 			case 1:

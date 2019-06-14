@@ -1,40 +1,37 @@
 package gameStates;
 
-import java.util.ArrayList;
+import java.util.Stack;
 
 //aqui podemos gerenciar os estados do game usando arraylist
 public class StateManager {
-	private ArrayList<GameState> states;
-	private int curState;
+	private Stack<GameState> states;
 	
 	public StateManager() {
-		curState = State.valueOf(State.MENUSTATE);
-		states = new ArrayList<GameState>();
-		states.add(new MenuState(this));
-		states.add(new PlayState(this));
+		states = new Stack<GameState>();
+		states.push(new MenuState(this));
 	}
 	
-	public void setState(int state) {
-		curState = state;
-	}
-	
-	public void setState(State state) {
-		curState = State.valueOf(state);
-	}
-	
-	public GameState getState() {
-		return states.get(curState);
+	public GameState getCurrentState() {
+		return states.peek();
 	}
 	
 	public void update() {
-		states.get(curState).update();
+		states.peek().update();
 	}
 	
 	public void draw(java.awt.Graphics2D g) {
-		states.get(curState).draw(g);
+		states.peek().draw(g);
 	}
 	
 	public void keyPressed(int key) {
-		states.get(curState).keyPressed(key);
+		states.peek().keyPressed(key);
+	}
+
+	public void push(GameState state) {
+		states.push(state);
+	}
+	
+	public void pop() {
+		states.pop();
 	}
 }

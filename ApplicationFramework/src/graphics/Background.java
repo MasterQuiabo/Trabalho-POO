@@ -11,14 +11,14 @@ import main.Panel;
 
 public class Background {
 	private BufferedImage bg;
-	private double x;
-	private double y;
-	private double vx;
-	private double vy;
+	private double posX;
+	private double posY;
+	private double vectorX;
+	private double vectorY;
 	
 	public Background(String end) {
-		x=0;
-		y=0;
+		posX=0;
+		posY=0;
 		try {
 			bg = ImageIO.read(getClass().getResourceAsStream(end));
 			
@@ -28,23 +28,23 @@ public class Background {
 	}
 	
 	public void setVector(double x,double y) {
-		vx = x;
-		vy = y;
+		vectorX = x;
+		vectorY = y;
 	}
 	
 	public void update() {
-		x += vx;
-		y += vy;
-		if(x<-Panel.width || x>Panel.width)x=0;
+		posX += vectorX;
+		posY += vectorY;
+		if(posX<-Panel.width || posX>Panel.width)posX=0;
 	}
 	
 	public void draw(Graphics g) {
-		g.drawImage(bg, (int)x, (int)y, null);
-		if(x<0) {
-			g.drawImage(bg,(int)x+Panel.width,(int)y,null); 
+		g.drawImage(bg, (int)posX, (int)posY, null);
+		if(posX<0) {
+			g.drawImage(bg,(int)posX+Panel.width,(int)posY,null); 
 		}
 		else{
-			g.drawImage(bg,(int)x-Panel.width,(int)y,null);
+			g.drawImage(bg,(int)posX-Panel.width,(int)posY,null);
 		}
 		
 	}
