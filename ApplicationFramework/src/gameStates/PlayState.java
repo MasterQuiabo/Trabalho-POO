@@ -20,6 +20,7 @@ public class PlayState extends GameState{
 	private static int tileSize = 64;
 	private static String[] playerFields = {"HP","MP"};
 	private static String[] playerNames = {"Player One","Player Two"};
+	private static String[] playerTurn = {"Player One Turn!!","Player Two Turn!!"};
 	private ArrayList<Wizard> playersArray;
 	private int actualTurn = 0;
 
@@ -74,22 +75,37 @@ public class PlayState extends GameState{
 			g.drawRect(i*64+1,1, 62, 62);
 		}
 		
+		g.setColor(Color.RED);
+		if(actualTurn == 0)
+		{
+			g.drawString(playerTurn[0],350,Panel.height-300);
+		}
+		else
+		{
+			g.drawString(playerTurn[1],350,Panel.height-300);
+		}
+		
+		
 		g.setColor(Color.white);
 		g.drawString(playerNames[0],0,Panel.height-65);
 		g.drawString(playerFields[0],350,Panel.height-50);
-		g.drawString(playerFields[1],350,Panel.height-20);
+		g.drawString(String.valueOf(this.playersArray.get(0).getHP()),410,Panel.height-50);
+		g.drawString(playerFields[1],470,Panel.height-50);
+		g.drawString(String.valueOf(this.playersArray.get(0).getMP()),530,Panel.height-50);
 		g.fillRect(350,Panel.height-50,(int) this.playersArray.get(0).getMaxHP(), 10);
-		g.fillRect(350,Panel.height-20,(int) this.playersArray.get(0).getMaxMP(), 10);
+		g.fillRect(470,Panel.height-50,(int) this.playersArray.get(0).getMaxMP(), 10);
 		g.setColor(Color.red);
 		g.fillRect(350,Panel.height-50,(int) this.playersArray.get(0).getHP(), 10);
 		g.setColor(Color.blue);
-		g.fillRect(350,Panel.height-20,(int) this.playersArray.get(0).getMP(), 10);
+		g.fillRect(470,Panel.height-50,(int) this.playersArray.get(0).getMP(), 10);
 		
 		
 		g.setColor(Color.white);
 		g.drawString(playerNames[1],0,Panel.height-325);
 		g.drawString(playerFields[0],350,Panel.height-380);
+		g.drawString(String.valueOf(this.playersArray.get(1).getHP()),400,Panel.height-380);
 		g.drawString(playerFields[1],350,Panel.height-350);
+		g.drawString(String.valueOf(this.playersArray.get(1).getMP()),400,Panel.height-350);
 		g.fillRect(350,Panel.height-380,(int) this.playersArray.get(1).getMaxHP(), 10);
 		g.fillRect(350,Panel.height-350,(int) this.playersArray.get(1).getMaxMP(), 10);
 		g.setColor(Color.red);
@@ -166,6 +182,19 @@ public class PlayState extends GameState{
 		return 0;
 	}
 	
+	public int getOtherPlayer()
+	{
+		int lastTurn;
+		if(actualTurn == 1)
+		{
+			lastTurn = 0;
+		}
+		else
+			lastTurn = 1;
+		
+		return lastTurn;
+	}
+	
 	public void updateGame()
 	{
 		Wizard upWizOne = this.playersArray.get(0);
@@ -176,7 +205,7 @@ public class PlayState extends GameState{
 		
 		// Ativa regeneração passiva de MP, caso o valor passivo exceda o máximo de MP ele não extrapola
 		
-		// *Mudei pra simplificar o codigo. Agora o metodo passive regeneration testa se ultrapassou ou n�o o maxMP.
+		// *Mudei pra simplificar o codigo. Agora o metodo passive regeneration testa se ultrapassou ou n�o o maxMP.
 		
 		upWizOne.passiveRegeneration();
 		
@@ -211,16 +240,20 @@ public class PlayState extends GameState{
 
 	@Override
 	public void keyPressed(int key) {
-		double DMG;	
+		double DMG;
 		switch(key) {
 			case KeyEvent.VK_Q:
 				DMG = this.playersArray.get(actualTurn).elementalStrike();
-				updateGame();
-				DMG = mitigateDMG(DMG);
-				this.playersArray.get(actualTurn).loseHP(DMG);
-				System.out.println(actualTurn);
-				break;
-				
+				if(DMG != -1)
+				{
+					DMG = mitigateDMG(DMG);
+					this.playersArray.get(getOtherPlayer()).loseHP(DMG);
+					updateGame();
+			
+					break;
+				}
+				else
+					break;
 			case KeyEvent.VK_W:
 				this.playersArray.get(actualTurn).elementalWisdom();
 				updateGame();
@@ -228,9 +261,24 @@ public class PlayState extends GameState{
 				
 			case KeyEvent.VK_E:
 				DMG = this.playersArray.get(actualTurn).ultimateStrike();
+				if(DMG != -1)
+				{
+					DMG = mitigateDMG(DMG);
+					this.playersArray.get(getOtherPlayer()).loseHP(DMG);
+					updateGame();
+					
+					break;
+				}
+				else
+					break;
+			case KeyEvent.VK_T:
+				
+				// Pula turno
+				
 				updateGame();
-				DMG = mitigateDMG(DMG);
-				this.playersArray.get(actualTurn).loseHP(DMG);
+				break;
+			case KeyEvent.VK_L:
+				this.playersArray.get(actualTurn).loseMP(this.playersArray.get(actualTurn).getMaxMP());
 				break;
 				
 		// Habilidades únicas
@@ -240,18 +288,19 @@ public class PlayState extends GameState{
 				if(playerType == 1)
 				{
 					DMG = ((FireWizard) this.playersArray.get(actualTurn)).trueFlames();
+					this.playersArray.get(getOtherPlayer()).loseHP(DMG);
 					updateGame();
-					this.playersArray.get(actualTurn).loseHP(DMG);
 				}
 				else if(playerType == 2)
 				{
 					int turnsStunned = ((IceWizard) this.playersArray.get(actualTurn)).stunningBlow();
+					this.playersArray.get(getOtherPlayer()).stun(turnsStunned);
+					
 					updateGame();
-					this.playersArray.get(actualTurn).stun(turnsStunned);
 				}
 				else if(playerType == 3)
 				{
-					((EarthWizard) this.playersArray.get(actualTurn)).intenseHealing();;
+					((EarthWizard) this.playersArray.get(actualTurn)).intenseHealing();
 					updateGame();
 				}
 				break;

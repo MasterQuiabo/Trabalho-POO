@@ -12,16 +12,28 @@ public class FireWizard extends Wizard{
 		double DMG = 7.5;
 		double consumeMP = 35;
 		
-		super.loseMP(consumeMP);
-		return DMG;
-
+		if(super.getMP() >= 35)
+		{
+			super.loseMP(consumeMP);
+			return DMG;
+		}
+		else
+			return -1;
 	}
 	
 	public void elementalWisdom()
 	{
 		double gainMP = 20;
 		
-		super.gainMP(gainMP);
+		if((super.getMP() + 20) <= super.getMaxMP())
+		{
+			super.gainMP(gainMP);
+		}
+		else
+		{
+			super.gainMP(super.getMaxMP() - super.getMP());
+		}
+		
 	}
 	
 	public double ultimateStrike()
@@ -29,8 +41,14 @@ public class FireWizard extends Wizard{
 		double DMG = 25;
 		double consumeMP = 80;
 		
-		super.loseMP(consumeMP);
-		return DMG;
+		if(super.getMP() >= 80)
+		{
+			super.loseMP(consumeMP);
+			return DMG;
+		}
+		else
+			return -1;
+		
 	}
 	
 	// Habilidade única //
@@ -40,8 +58,14 @@ public class FireWizard extends Wizard{
 		double TrueDMG = 15;
 		double consumeMP = 60;
 		
-		super.loseMP(consumeMP);
-		return TrueDMG;
+		if(super.getMP() >= 60)
+		{
+			super.loseMP(consumeMP);
+			return TrueDMG;
+		}
+		else
+			return -1;
+		
 	}
 
 }

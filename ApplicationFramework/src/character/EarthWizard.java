@@ -12,8 +12,13 @@ public class EarthWizard extends Wizard{
 		double DMG = 5;
 		double consumeMP = 30;
 		
-		super.loseMP(consumeMP);
-		return DMG;
+		if(super.getMP() >= 30)
+		{
+			super.loseMP(consumeMP);
+			return DMG;
+		}
+		else
+			return -1;
 
 	}
 	
@@ -21,7 +26,14 @@ public class EarthWizard extends Wizard{
 	{
 		double gainMP = 30;
 		
-		super.gainMP(gainMP);
+		if((super.getMP() + 30) <= super.getMaxMP())
+		{
+			super.gainMP(gainMP);
+		}
+		else
+		{
+			super.gainMP(super.getMaxMP() - super.getMP());
+		}
 	}
 	
 	public double ultimateStrike()
@@ -29,19 +41,37 @@ public class EarthWizard extends Wizard{
 		double DMG = 20;
 		double consumeMP = 80;
 		
-		super.loseMP(consumeMP);
-		return DMG;
+		if(super.getMP() >= 80)
+		{
+			super.loseMP(consumeMP);
+			return DMG;
+		}
+		else
+			return -1;
 	}
 	
 	// Habilidade única //
 	
-	public void intenseHealing()
+	public int intenseHealing()
 	{
 		double HP = 20;
 		double consumeMP = 30;
 		
-		super.loseMP(consumeMP);
-		super.gainHP(HP);
+		if(super.getMP() >= 30)
+		{
+			super.loseMP(consumeMP);
+			if((super.getHP() + 20) <= super.getMaxHP())
+			{
+				super.gainHP(HP);
+			}
+			else
+				super.gainHP(super.getMaxHP() - super.getHP());	
+		}
+		else
+			return -1;
+		
+		return 0;
+		
 	}
 	
 	

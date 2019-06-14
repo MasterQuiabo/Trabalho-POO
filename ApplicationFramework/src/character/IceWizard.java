@@ -12,8 +12,13 @@ public class IceWizard extends Wizard{
 		double DMG = 5;
 		double consumeMP = 25;
 		
-		super.loseMP(consumeMP);
-		return DMG;
+		if(super.getMP() >= 25)
+		{
+			super.loseMP(consumeMP);
+			return DMG;
+		}
+		else
+			return -1;
 
 	}
 	
@@ -21,7 +26,14 @@ public class IceWizard extends Wizard{
 	{
 		double gainMP = 25;
 		
-		super.gainMP(gainMP);
+		if((super.getMP() + 25) <= super.getMaxMP())
+		{
+			super.gainMP(gainMP);
+		}
+		else
+		{
+			super.gainMP(super.getMaxMP() - super.getMP());
+		}
 	}
 	
 	public double ultimateStrike()
@@ -29,8 +41,13 @@ public class IceWizard extends Wizard{
 		double DMG = 20;
 		double consumeMP = 60;
 		
-		super.loseMP(consumeMP);
-		return DMG;
+		if(super.getMP() >= 60)
+		{
+			super.loseMP(consumeMP);
+			return DMG;
+		}
+		else
+			return -1;
 	}
 	
 	// Habilidade única //
@@ -39,7 +56,13 @@ public class IceWizard extends Wizard{
 		double consumeMP = 40;
 		int turnsStunned = 1;
 
-		super.loseMP(consumeMP);
-		return turnsStunned;
+		if(super.getMP() >= 40)
+		{
+			super.loseMP(consumeMP);
+			return turnsStunned;
+		}
+		else
+			return -1;
+		
 	}
 }
