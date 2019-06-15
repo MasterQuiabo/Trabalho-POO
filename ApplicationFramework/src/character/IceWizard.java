@@ -5,14 +5,15 @@ public class IceWizard extends Wizard{
 	public IceWizard()
 	{
 		super(120, 80, 0.8, 1.0, 1.2);
+		super.setType(ICE);
 	}
 	
 	public double elementalStrike()
 	{
-		double DMG = 5;
+		double DMG = 15;
 		double consumeMP = 25;
 		
-		if(super.getMP() >= 25)
+		if(super.getMP() >= consumeMP)
 		{
 			super.loseMP(consumeMP);
 			return DMG;
@@ -24,9 +25,9 @@ public class IceWizard extends Wizard{
 	
 	public void elementalWisdom()
 	{
-		double gainMP = 25;
+		double gainMP = 30;
 		
-		if((super.getMP() + 25) <= super.getMaxMP())
+		if((super.getMP() + gainMP) <= super.getMaxMP())
 		{
 			super.gainMP(gainMP);
 		}
@@ -38,10 +39,10 @@ public class IceWizard extends Wizard{
 	
 	public double ultimateStrike()
 	{
-		double DMG = 20;
+		double DMG = 40;
 		double consumeMP = 60;
 		
-		if(super.getMP() >= 60)
+		if(super.getMP() >= consumeMP)
 		{
 			super.loseMP(consumeMP);
 			return DMG;
@@ -53,10 +54,10 @@ public class IceWizard extends Wizard{
 	// Habilidade única //
 	
 	public int stunningBlow(){
-		double consumeMP = 40;
+		double consumeMP = 60;
 		int turnsStunned = 2;
 
-		if(super.getMP() >= 40)
+		if(super.getMP() >= consumeMP)
 		{
 			super.loseMP(consumeMP);
 			return turnsStunned;
@@ -64,5 +65,22 @@ public class IceWizard extends Wizard{
 		else
 			return -1;
 		
+	}
+	
+	public void takeDamage(double DMG, int dmgType) {
+		
+		switch(dmgType) {
+			case FIRE:
+				DMG*=super.getFireResistance();
+				break;
+			case ICE:
+				DMG*=super.getIceResistance();
+				break;
+			case EARTH:
+				DMG*=super.getEarthResistance();
+				break;
+		}
+		
+		super.loseHP(DMG);
 	}
 }

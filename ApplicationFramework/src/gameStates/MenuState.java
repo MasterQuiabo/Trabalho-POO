@@ -82,7 +82,7 @@ public class MenuState extends GameState{
 			case KeyEvent.VK_UP:
 				curChoice--;
 				
-				if(curChoice == -1) {
+				if(curChoice < 0) {
 					curChoice = options.length - 1;
 				}
 				break;
@@ -90,7 +90,7 @@ public class MenuState extends GameState{
 			case KeyEvent.VK_DOWN: 
 				curChoice++;
 				
-				if(curChoice == options.length) {
+				if(curChoice >= options.length) {
 					curChoice = 0;
 				}
 				break;

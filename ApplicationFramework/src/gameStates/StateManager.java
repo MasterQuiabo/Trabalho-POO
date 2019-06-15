@@ -2,7 +2,7 @@ package gameStates;
 
 import java.util.Stack;
 
-//aqui podemos gerenciar os estados do game usando arraylist
+//aqui podemos gerenciar os estados do game usando uma pilha
 public class StateManager {
 	private Stack<GameState> states;
 	

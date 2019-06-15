@@ -9,6 +9,10 @@ public abstract class Wizard {
 	private double iceResistance;
 	private double earthResistance;
 	private int turnsStunned;
+	private int type;
+	protected final static int FIRE = 0;
+	protected final static int ICE = 1;
+	protected final static int EARTH = 2;
 	
 	public Wizard(double HP, double MP, double fireResistance, double iceResistance, double earthResistance)
 	{
@@ -38,6 +42,8 @@ public abstract class Wizard {
 	
 	// Habilidades genéricas //
 	
+	public abstract void takeDamage(double DMG, int dmgType);
+	
 	public abstract double elementalStrike();
 	
 	public abstract void elementalWisdom();
@@ -62,12 +68,12 @@ public abstract class Wizard {
 	
 	public void loseHP(double DMG)
 	{
-		this.HP = this.HP - DMG;
+		this.HP = (int)(this.HP - DMG);
 	}
 	
 	public void loseMP(double consumeMP)
 	{
-		this.MP = this.MP - consumeMP;
+		this.MP = (int)(this.MP - consumeMP);
 	}
 	
 	public void gainMP(double MP)
@@ -99,12 +105,12 @@ public abstract class Wizard {
 	
 	public double getHP()
 	{
-		return this.HP;
+		return (int)this.HP;
 	}
-	
+
 	public double getMP()
 	{
-		return this.MP;
+		return (int)this.MP;
 	}
 	
 	public double getFireResistance()
@@ -125,6 +131,14 @@ public abstract class Wizard {
 	public int getTurnsStunned()
 	{
 		return this.turnsStunned;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
 	}
 	
 	// ---------------------------------------- //

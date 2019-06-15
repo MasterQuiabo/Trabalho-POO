@@ -41,7 +41,7 @@ public class Background {
 	public void draw(Graphics g) {
 		g.drawImage(bg, (int)posX, (int)posY, null);
 		if(posX<0) {
-			g.drawImage(bg,(int)posX+Panel.width,(int)posY,null); 
+			g.drawImage(bg,(int)posX+Panel.width,(int)posY,null);
 		}
 		else{
 			g.drawImage(bg,(int)posX-Panel.width,(int)posY,null);

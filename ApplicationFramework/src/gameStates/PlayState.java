@@ -13,6 +13,7 @@ import character.*;
 
 import graphics.Background;
 import graphics.CharacterAnimator;
+import graphics.Effect;
 import main.Panel;
 import java.util.ArrayList;
 
@@ -20,18 +21,20 @@ public class PlayState extends GameState{
 	
 	private Wizard playerOne;
 	private Wizard playerTwo;
-	
+	private Effect effect;
 	private BufferedImage scenary;
 	private static int tileSize = 64;
 	private BufferedImage[] playerOneIcons;
 	private CharacterAnimator playerOneSprite;
+	private CharacterAnimator playerTwoSprite;
 	private String[] spritesNames = {"redWizard.png","blueWizard.png","greenWizard.png"};
+	private String[] flippedSpritesNames = {"redWizardFlipped.png","blueWizardFlipped.png","greenWizardFlipped.png"};
 	private String[] iconNames = {"fireQ","fireE","fireR","iceQ","iceE","iceR","earthQ","earthE","earthR","wisdomW"};
 	private static String[] playerFields = {"HP","MP"};
 	private static String[] playerNames = {"Player One","Player Two"};
 	private static String[] playerTurn = {"Player One Turn!!","Player Two Turn!!"};
 	private ArrayList<Wizard> playersArray;
-	private int actualTurn = 0;
+	private int currentTurn = 0;
 
 	public PlayState(StateManager sm, Wizard p1) {
 		super(sm);
@@ -61,7 +64,8 @@ public class PlayState extends GameState{
 			
 		playerOneSprite = new CharacterAnimator(spritesNames[aux/3]);
 		playerOneSprite.setPosition(200,Panel.height-145);
-		
+		playerTwoSprite = new CharacterAnimator(flippedSpritesNames[2]);
+		playerTwoSprite.setPosition(400,Panel.height-145);
 		for(int i=0;i<playerOneIcons.length;i++) {
 			try {
 				playerOneIcons[i] = ImageIO.read(getClass().getResourceAsStream("/Icons/"+iconNames[i+aux]+".png"));
@@ -83,6 +87,7 @@ public class PlayState extends GameState{
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	@Override
@@ -113,7 +118,7 @@ public class PlayState extends GameState{
 		}
 		
 		g.setColor(Color.RED);
-		if(actualTurn == 0)
+		if(currentTurn == 0)
 		{
 			g.drawString(playerTurn[0],350,Panel.height-300);
 		}
@@ -151,6 +156,7 @@ public class PlayState extends GameState{
 		g.fillRect(350,Panel.height-350,(int) this.playersArray.get(1).getMP(), 10);
 		
 		playerOneSprite.draw(g);
+		playerTwoSprite.draw(g);
 	}
 
 	@Override
@@ -183,7 +189,7 @@ public class PlayState extends GameState{
 	public int otherPlayerType()
 	{
 		int lastTurn;
-		if(actualTurn == 1)
+		if(currentTurn == 1)
 		{
 			lastTurn = 0;
 		}
@@ -194,45 +200,27 @@ public class PlayState extends GameState{
 		return wizType;
 	}
 	
-	// Aplica resistências e fraquezas do oponente ao dano iminente
 	
-	public double mitigateDMG(double DMG)
-	{
-		int wizType = otherPlayerType();
-		
-		if(wizType == 1)
-		{
-			DMG = DMG*this.playersArray.get(actualTurn).getFireResistance();
-			return DMG;
-		}
-		else if(wizType == 2)
-		{
-			DMG = DMG*this.playersArray.get(actualTurn).getIceResistance();
-			return DMG;
-		}
-		else if(wizType == 3)
-		{
-			DMG = DMG*this.playersArray.get(actualTurn).getEarthResistance();
-			return DMG;
-		}
-		return 0;
+	public Wizard getCurrentPlayer() {
+		return playersArray.get(currentTurn);
 	}
 	
-	public int getOtherPlayer()
+	public Wizard getOtherPlayer()
 	{
 		int lastTurn;
-		if(actualTurn == 1)
+		if(currentTurn == 1)
 		{
 			lastTurn = 0;
 		}
 		else
 			lastTurn = 1;
 		
-		return lastTurn;
+		return playersArray.get(lastTurn);
 	}
 	
 	public void updateGame()
 	{
+		
 		Wizard upWizOne = this.playersArray.get(0);
 		Wizard upWizTwo = this.playersArray.get(1);
 		
@@ -247,31 +235,34 @@ public class PlayState extends GameState{
 		
 		upWizTwo.passiveRegeneration();
 		
-		// Atualiza os dados no array
-		
-		this.playersArray.set(0, upWizOne);
-		this.playersArray.set(1, upWizTwo);
-		
 		// Atualiza o turno e verifica se o oponente está atordoado
 		
-		if(this.actualTurn == 0)
+		if(this.currentTurn == 0)
 		{
 			if(this.playersArray.get(1).getTurnsStunned() > 0)
 			{
 				this.playersArray.get(1).updateStun();
 			}
 			else
-				this.actualTurn = 1;
+				this.currentTurn = 1;
 		}
-		else if(this.actualTurn == 1)
+		else if(this.currentTurn == 1)
 		{
 			if(this.playersArray.get(0).getTurnsStunned() > 0)
 			{
 				this.playersArray.get(0).updateStun();
 			}
 			else
-				this.actualTurn = 0;
+				this.currentTurn = 0;
 		}
+	}
+	// polimorfismo
+	public void takeDamage(Wizard wiz, double DMG) {
+		wiz.takeDamage(DMG, getCurrentPlayer().getType());
+	}
+	
+	public void stun(Wizard wiz, int turnsStunned) {
+		wiz.stun(turnsStunned);
 	}
 
 	@Override
@@ -280,11 +271,10 @@ public class PlayState extends GameState{
 		
 		switch(key) {
 			case KeyEvent.VK_Q:
-				DMG = this.playersArray.get(actualTurn).elementalStrike();
+				DMG = this.playersArray.get(currentTurn).elementalStrike();
 				if(DMG != -1)
 				{
-					DMG = mitigateDMG(DMG);
-					this.playersArray.get(getOtherPlayer()).loseHP(DMG);
+					takeDamage(getOtherPlayer(),DMG);
 					updateGame();
 			
 					break;
@@ -292,16 +282,15 @@ public class PlayState extends GameState{
 				else
 					break;
 			case KeyEvent.VK_W:
-				this.playersArray.get(actualTurn).elementalWisdom();
+				this.playersArray.get(currentTurn).elementalWisdom();
 				updateGame();
 				break;
 				
 			case KeyEvent.VK_E:
-				DMG = this.playersArray.get(actualTurn).ultimateStrike();
+				DMG = this.playersArray.get(currentTurn).ultimateStrike();
 				if(DMG != -1)
 				{
-					DMG = mitigateDMG(DMG);
-					this.playersArray.get(getOtherPlayer()).loseHP(DMG);
+					takeDamage(getOtherPlayer(),DMG);
 					updateGame();
 					
 					break;
@@ -315,32 +304,32 @@ public class PlayState extends GameState{
 				updateGame();
 				break;
 			case KeyEvent.VK_L:
-				this.playersArray.get(actualTurn).loseMP(this.playersArray.get(actualTurn).getMaxMP());
+				this.playersArray.get(currentTurn).loseMP(this.playersArray.get(currentTurn).getMaxMP());
 				break;
 				
 		// Habilidades únicas
 				
 			case KeyEvent.VK_R:
-				int playerType = validateType(this.playersArray.get(actualTurn));
+				int playerType = validateType(this.playersArray.get(currentTurn));
 				if(playerType == 1)
 				{
-					DMG = ((FireWizard) this.playersArray.get(actualTurn)).trueFlames();
+					DMG = ((FireWizard) this.playersArray.get(currentTurn)).trueFlames();
 					if(DMG != -1) {
-						this.playersArray.get(getOtherPlayer()).loseHP(DMG);
+						takeDamage(getOtherPlayer(),DMG);
 						updateGame();
 					}
 				}
 				else if(playerType == 2)
 				{
-					int turnsStunned = ((IceWizard) this.playersArray.get(actualTurn)).stunningBlow();
-					this.playersArray.get(getOtherPlayer()).stun(turnsStunned);
+					int turnsStunned = ((IceWizard) this.playersArray.get(currentTurn)).stunningBlow();
+					stun(getOtherPlayer(),turnsStunned);
 					if(turnsStunned != -1) {
 						updateGame();
 					}
 				}
 				else if(playerType == 3)
 				{
-					double heal = ((EarthWizard) this.playersArray.get(actualTurn)).intenseHealing();
+					double heal = ((EarthWizard) this.playersArray.get(currentTurn)).intenseHealing();
 					if(heal != -1) {
 						updateGame();
 					}

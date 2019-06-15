@@ -16,6 +16,7 @@ public class CharacterAnimator {
 	private double posY;
 	private int curFrame;
 	private int timing;
+	private boolean flip;
 	private boolean casting;
 
 	public CharacterAnimator(String end) {
@@ -31,6 +32,7 @@ public class CharacterAnimator {
 		catch(IOException e) {
 			e.printStackTrace();
 		}
+		
 		for(int i=0;i<numFrames;i++) {
 			idleFrames[i] = sprite.getSubimage(i*16, 0, 16, 21);
 		}
