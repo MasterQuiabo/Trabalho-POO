@@ -31,11 +31,11 @@ public class MenuState extends GameState{
 			e.printStackTrace();
 		}
 	}
-	
+	@Override
 	public void update() {
 		bg.update();
 	}
-	
+	@Override
 	public void draw(Graphics2D g) {
 		
 		// desenha o background
@@ -72,7 +72,7 @@ public class MenuState extends GameState{
 			default: break;
 		}
 	}
-	
+	@Override
 	public void keyPressed(int key) {
 		switch(key) {
 			case KeyEvent.VK_ENTER:

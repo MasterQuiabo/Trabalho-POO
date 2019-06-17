@@ -97,6 +97,15 @@ public abstract class Wizard {
 			
 	}
 	
+	public void passiveRegeneration(double mp)
+	{
+		this.MP = this.MP + mp;
+		if(this.MP>getMaxMP()) {
+			this.MP = getMaxMP();
+		}
+			
+	}
+	
 	// ---------------------------------------- //
 	
 	// Gets //

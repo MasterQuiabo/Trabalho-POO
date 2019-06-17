@@ -27,14 +27,7 @@ public class IceWizard extends Wizard{
 	{
 		double gainMP = 30;
 		
-		if((super.getMP() + gainMP) <= super.getMaxMP())
-		{
-			super.gainMP(gainMP);
-		}
-		else
-		{
-			super.gainMP(super.getMaxMP() - super.getMP());
-		}
+		passiveRegeneration(gainMP);
 	}
 	
 	public double ultimateStrike()

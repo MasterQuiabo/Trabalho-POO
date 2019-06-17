@@ -13,7 +13,7 @@ import character.*;
 
 import graphics.Background;
 import graphics.CharacterAnimator;
-import graphics.Effect;
+
 import main.Panel;
 import java.util.ArrayList;
 
@@ -21,7 +21,6 @@ public class PlayState extends GameState{
 	
 	private Wizard playerOne;
 	private Wizard playerTwo;
-	private Effect effect;
 	private BufferedImage scenary;
 	private static int tileSize = 64;
 	private BufferedImage[] playerOneIcons;
@@ -131,25 +130,29 @@ public class PlayState extends GameState{
 		g.setColor(Color.white);
 		g.drawString(playerNames[0],0,Panel.height-65);
 		g.drawString(playerFields[0],350,Panel.height-50);
-		g.drawString(String.valueOf(this.playersArray.get(0).getHP()),410,Panel.height-50);
-		g.drawString(playerFields[1],470,Panel.height-50);
-		g.drawString(String.valueOf(this.playersArray.get(0).getMP()),530,Panel.height-50);
+		//mp hp max
+		g.drawString(String.valueOf(this.playersArray.get(0).getHP()),400,Panel.height-50);
+		g.drawString(playerFields[1],350,Panel.height-20);
+		g.drawString(String.valueOf(this.playersArray.get(0).getMP()),400,Panel.height-20);
 		g.fillRect(350,Panel.height-50,(int) this.playersArray.get(0).getMaxHP(), 10);
-		g.fillRect(470,Panel.height-50,(int) this.playersArray.get(0).getMaxMP(), 10);
+		g.fillRect(350,Panel.height-20,(int) this.playersArray.get(0).getMaxMP(), 10);
+		//mp hp
 		g.setColor(Color.red);
 		g.fillRect(350,Panel.height-50,(int) this.playersArray.get(0).getHP(), 10);
 		g.setColor(Color.blue);
-		g.fillRect(470,Panel.height-50,(int) this.playersArray.get(0).getMP(), 10);
+		g.fillRect(350,Panel.height-20,(int) this.playersArray.get(0).getMP(), 10);
 		
 		
 		g.setColor(Color.white);
 		g.drawString(playerNames[1],0,Panel.height-325);
 		g.drawString(playerFields[0],350,Panel.height-380);
+		//mp hp max
 		g.drawString(String.valueOf(this.playersArray.get(1).getHP()),400,Panel.height-380);
 		g.drawString(playerFields[1],350,Panel.height-350);
 		g.drawString(String.valueOf(this.playersArray.get(1).getMP()),400,Panel.height-350);
 		g.fillRect(350,Panel.height-380,(int) this.playersArray.get(1).getMaxHP(), 10);
 		g.fillRect(350,Panel.height-350,(int) this.playersArray.get(1).getMaxMP(), 10);
+		//mp hp
 		g.setColor(Color.red);
 		g.fillRect(350,Panel.height-380,(int) this.playersArray.get(1).getHP(), 10);
 		g.setColor(Color.blue);
@@ -258,7 +261,7 @@ public class PlayState extends GameState{
 	}
 	// polimorfismo
 	public void takeDamage(Wizard wiz, double DMG) {
-		wiz.takeDamage(DMG, getCurrentPlayer().getType());
+		wiz.takeDamage(DMG, validateType(getCurrentPlayer())-1);
 	}
 	
 	public void stun(Wizard wiz, int turnsStunned) {

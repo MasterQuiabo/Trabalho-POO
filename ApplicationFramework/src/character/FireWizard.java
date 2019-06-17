@@ -26,14 +26,7 @@ public class FireWizard extends Wizard{
 	{
 		double gainMP = 20;
 		
-		if((super.getMP() + gainMP) <= super.getMaxMP())
-		{
-			super.gainMP(gainMP);
-		}
-		else
-		{
-			super.gainMP(super.getMaxMP() - super.getMP());
-		}
+		passiveRegeneration(gainMP);
 		
 	}
 	

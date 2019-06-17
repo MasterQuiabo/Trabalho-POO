@@ -30,14 +30,7 @@ public class EarthWizard extends Wizard{
 	{
 		double gainMP = 35;
 		
-		if((super.getMP() + gainMP) <= super.getMaxMP())
-		{
-			super.gainMP(gainMP);
-		}
-		else
-		{
-			super.gainMP(super.getMaxMP() - super.getMP());
-		}
+		passiveRegeneration(gainMP);
 	}
 	
 	public double ultimateStrike()
